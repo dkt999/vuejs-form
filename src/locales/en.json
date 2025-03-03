@@ -1,0 +1,12 @@
+{
+    "welcome": "Welcome",
+    "goodbye": "Goodbye",
+    "change_language": "Change language",
+    "password" : "Password",
+    "retype_password" : "Retype password",
+    "password_is_not_requirement" : "Password must be at least 6 characters!",
+    "password_is_not_matched" : "Password is not matched!",
+    "username": "Username",
+    "field_required": "This field is required",
+    "login": "Login"
+  }
