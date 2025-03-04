@@ -1,12 +1,19 @@
 {
-    "welcome": "Welcome",
-    "goodbye": "Goodbye",
-    "change_language": "Change language",
-    "password" : "Password",
-    "retype_password" : "Retype password",
-    "password_is_not_requirement" : "Password must be at least 6 characters!",
-    "password_is_not_matched" : "Password is not matched!",
-    "username": "Username",
-    "field_required": "This field is required",
-    "login": "Login"
-  }
+  "password" : "Password",
+  "name" : "Name",
+  "avatar" : "Avatar",
+  "birthday" : "Birthday",
+  "retype_password" : "Retype password",
+  "password_is_not_requirement" : "Password must be at least 8 characters!",
+  "password_is_not_matched" : "Password is not matched!",
+  "username": "Username",
+  "field_required": "This field is required",
+  "login": "Login",
+  "password_is_not_complexity":"Password is not complexity",
+  "login_to_system":"Login to message",
+  "register_to_system":"Register account",
+  "0x0001:EMPTY_USERNAME":"Please enter your username",
+  "0x0002:EMPTY_PASSWORD":"Please enter your password",
+  "0x0003:FILE_TOO_LARGE":"File too large",
+  "0x0004:FILE_RETRICT":"File is not allow upload"
+}

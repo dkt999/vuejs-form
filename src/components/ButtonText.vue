@@ -13,7 +13,11 @@
     </div>
 </template>
   
-  <style>
+<style scoped>
+.container{
+  display:flex;
+  width: fit-content;
+}
   /* Button Styles */
 .md-button {
   font-size: 16px;

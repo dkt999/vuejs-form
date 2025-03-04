@@ -2,31 +2,51 @@
 import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 const { t, locale } = useI18n();
+import { strongPasswordRegex } from "@/config"; // Import config
+import { minimumPasswordLength } from "@/config"; // Import config
 const props = defineProps({
   label: String,
   compareWith: String,
-  type: {
-    type: String,
-    default: "text",
+  isRequired:
+  {
+    type: Boolean,
+    default: false,
+  },
+  isChecked:
+  {
+    type: Boolean,
+    default: true,
   },
   modelValue: String,
 });
 const errorMessage = computed(() => {
-  if (props.type === "password" && props.modelValue.length > 0 && props.modelValue.length < 6) {
+  if(props.isRequired && props.modelValue.length === 0  && isTouched.value)
+  {
+    return t('field_required');
+  }
+  if(props.isChecked && props.modelValue.length > 0 && props.modelValue.length < minimumPasswordLength) {
     return t('password_is_not_requirement');
   }
-  if(props.compareWith !== props.modelValue && props.compareWith !== undefined && props.modelValue.length > 0){
+  if(props.isChecked && !strongPasswordRegex.test(props.modelValue) && props.modelValue.length > 0)
+  {
+    return t('password_is_not_complexity');
+  }
+  if(props.compareWith !== undefined && props.compareWith !== props.modelValue && props.modelValue.length > 0){
     return t('password_is_not_matched');
   }
   return "";
 });
 const emit = defineEmits(["update:modelValue"]);
+const isTouched = ref(false);
 const inputValue = ref(""); // Tạo state local
 const isFilled = computed(() => inputValue.value.length > 0);
 const showPassword = ref(false);
 const onInput = (event) => {
   inputValue.value = event.target.value;
-  emit("update:modelValue", inputValue.value); //
+  emit("update:modelValue", inputValue.value, errorMessage); //
+};
+const onBlur = () => {
+  isTouched.value = true; // Đánh dấu input đã được focus
 };
 </script>
 
@@ -37,6 +57,7 @@ const onInput = (event) => {
         :type="showPassword ? 'text' : 'password'"
         :value="inputValue"
         @input="onInput"
+        @blur="onBlur"
         placeholder=" "
       />
       <label :class="{ active: isFilled }">{{ label }}</label>
@@ -60,7 +81,7 @@ const onInput = (event) => {
 }
 .mdi{
   line-height: 56px;
-  margin-right: 8px;
+  margin-right: 17px;
 }
 .input-container input {
   width: 100%;

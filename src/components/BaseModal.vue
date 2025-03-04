@@ -39,9 +39,10 @@
   .modal{
     border-radius: 8px;
     background-color: var(--color-background-soft);
-    height: 300px;
+    max-height: 80vh;
     width: 400px;
     overflow: hidden;
+    overflow-y: auto;
   }
   .title{
     background-color: var(--color-background);

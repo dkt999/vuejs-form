@@ -26,25 +26,47 @@ const onInput = (event) => {
 const onBlur = () => {
   isTouched.value = true; // Đánh dấu input đã được focus
 };
+const openDatePicker = () => {
+  const dateInput = document.getElementById("date-picker");
+  if (dateInput) {
+    dateInput.showPicker();
+  }
+};
 </script>
 
 <template>
   <div class="input-wrap">
-    <div class="input-container">
+    <div class="input-container" @click="onBlur">
       <input
+        id="date-picker"
         :value="inputValue"
-        type="text"
+        type="date"
         @input="onInput"
         @blur="onBlur"
-        placeholder=" "
+        placeholder=""
+        :class="[{dateshow: inputValue}]"
       />
       <label :class="{ active: isFilled }">{{ label }}</label>
+      <i :class="['mdi', 'mdi-calendar']" @click="openDatePicker"></i>
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorMessage }}</div>
   </div>
 </template>
 
 <style scoped>
+/* Ẩn icon lịch mặc định */
+input::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+input::-webkit-datetime-edit {
+    display: none;
+}
+.dateshow::-webkit-datetime-edit {
+    display: inline-block;
+    font-family: sans-serif;
+}
+/* Ẩn placeholder mặc định */
 .input-wrap{
   height: 86px;
 }
@@ -58,7 +80,8 @@ const onBlur = () => {
 }
 .mdi{
   line-height: 56px;
-  margin-right: 8px;
+  margin-right: 17px;
+  margin-top: 0px;
 }
 .input-container input {
   width: 100%;
