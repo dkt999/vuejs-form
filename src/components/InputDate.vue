@@ -35,8 +35,8 @@ const openDatePicker = () => {
 </script>
 
 <template>
-  <div class="input-wrap">
-    <div class="input-container" @click="onBlur">
+  <div class="input-wrap" @click="openDatePicker">
+    <div class="input-container">
       <input
         id="date-picker"
         :value="inputValue"
@@ -47,7 +47,7 @@ const openDatePicker = () => {
         :class="[{dateshow: inputValue}]"
       />
       <label :class="{ active: isFilled }">{{ label }}</label>
-      <i :class="['mdi', 'mdi-calendar']" @click="openDatePicker"></i>
+      <i :class="['mdi', 'mdi-calendar']"></i>
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorMessage }}</div>
   </div>

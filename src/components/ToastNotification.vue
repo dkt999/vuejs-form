@@ -60,7 +60,7 @@ defineExpose({ showToast });
 .toast-container {
   position: fixed;
   bottom: 20px;
-  left: 20px;
+  right: 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;
