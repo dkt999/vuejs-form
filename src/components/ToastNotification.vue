@@ -76,7 +76,7 @@ defineExpose({ showToast });
   border-radius: 5px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
   opacity: 0;
-  transform: translateX(-200px); /* Toast bắt đầu ở ngoài màn hình */
+  transform: translateX(200px); /* Toast bắt đầu ở ngoài màn hình */
   transition: transform 0.2s ease-out, opacity 0.5s ease-out;
 }
 

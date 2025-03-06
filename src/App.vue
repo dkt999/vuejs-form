@@ -1,6 +1,8 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import Message from './components/Message.vue'
+import { provide, ref } from "vue";
+const token = ref(localStorage.getItem("token") || "");
+provide("token", token);
 </script>
 
 <template>

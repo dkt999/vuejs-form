@@ -14,7 +14,7 @@ const props = defineProps({
     type: Boolean,
     default: false, // Nếu true, chỉ cho phép chọn ảnh
   },
-  modelValue: String,
+  modelValue: [String, File],
 });
 const emit = defineEmits(["update:modelValue"]);
 
@@ -49,15 +49,22 @@ const handleFileChange = (event) => {
   const file = event.target.files[0];
   if (file) {
     selectedFile.value = file;
-    emit("update:modelValue", file.name); // Cập nhật tên file
-
-    // Nếu là ảnh, tạo URL preview
+    emit("update:modelValue", file);
     if (props.IsImage) {
       previewUrl.value = URL.createObjectURL(file);
     }
   }
 };
+const clearFile = () => {
+  selectedFile.value = null;
+  previewUrl.value = null;
+  emit("update:modelValue", "");
 
+  // Reset giá trị của input file để có thể chọn lại cùng một file
+  if (fileInput.value) {
+    fileInput.value.value = "";
+  }
+};
 const onBlur = () => {
   isTouched.value = true;
 };
@@ -78,7 +85,7 @@ const onBlur = () => {
       <div class="file-info">
         <span v-if="selectedFile">{{ selectedFile.name }}</span>
       </div>
-      <img v-if="IsImage && previewUrl" :src="previewUrl" alt="Preview" class="file-preview" />
+      <img v-if="IsImage && previewUrl" :src="previewUrl" alt="Preview" class="file-preview" @click.stop="clearFile"/>
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorMessage }}</div>
   </div>

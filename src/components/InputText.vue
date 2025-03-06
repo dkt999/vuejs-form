@@ -32,6 +32,7 @@ const onBlur = () => {
   <div class="input-wrap">
     <div class="input-container">
       <input
+        autocomplete="one-time-code"
         :value="inputValue"
         type="text"
         @input="onInput"
