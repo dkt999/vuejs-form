@@ -51,11 +51,11 @@ onMounted(loginByTokent)
 <template>
     <div class="message-app">
         <div class="quick-bar">
-            <ButtonCircleRipple v-if="!authStore.isAuthenticated" :icon="'mdi-google-ads'"/>
-            <ButtonImageCircle v-if="authStore.isAuthenticated"></ButtonImageCircle>
+            <ButtonCircleRipple v-if="!authStore.isAuthenticated" :icon="'mdi-message-bulleted'"/>
+            <ButtonImageCircle v-if="authStore.isAuthenticated" :src="authStore.user.avatar"></ButtonImageCircle>
             <div class="spacer"></div>
-            <ButtonCircleRipple :icon="'mdi-tune-vertical-variant'" @click="modalStore.toggleState(t('login_to_system'), MessageLogin)"/>
-            <ButtonCircleRipple :icon="'mdi-tune-vertical-variant'" @click="modalStore.toggleState(t('register_to_system'), MessageSettings)"/>
+            <ButtonCircleRipple v-if="!authStore.isAuthenticated" :icon="'mdi-login'" @click="modalStore.toggleState(t('login_to_system'), MessageLogin)"/>
+            <ButtonCircleRipple v-if="!authStore.isAuthenticated" :icon="'mdi-account-plus'" @click="modalStore.toggleState(t('register_to_system'), MessageSettings)"/>
             <ButtonLogout v-if="authStore.isAuthenticated"/>
         </div>
         <div>

@@ -19,3 +19,9 @@
 .popup-form {
   padding: 0.8rem;
 }
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+}

@@ -1,4 +1,6 @@
+<script setup>
+    import ListContact from '@/components/ListContact.vue';
+</script>
 <template>
-
-    đsd
+    <ListContact />
 </template>

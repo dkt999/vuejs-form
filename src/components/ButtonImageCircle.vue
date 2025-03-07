@@ -1,6 +1,7 @@
 <script setup>
   import { useAuthStore } from "@/stores/auth";
   import { ref, watchEffect  } from 'vue';
+  const props = defineProps(['src']);
   const serverAPI = import.meta.env.VITE_SERVER_API;
   const authStore = useAuthStore();
   const imageUrl = ref('1')
@@ -8,7 +9,7 @@
     if (!authStore.user || !authStore.user.avatar) return;
     const token = authStore.token;
     try {
-      const response = await fetch(`${serverAPI}/${authStore.user.avatar}`, {
+      const response = await fetch(`${serverAPI}/${props.src}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -46,6 +47,8 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     font-size: 1.0rem;
+    width: 48px;
+    height: 48px;
   }
   .icon img{
     width: 48px;
