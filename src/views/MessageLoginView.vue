@@ -7,6 +7,9 @@
     import InputText from "@/components/InputText.vue";
     import ButtonText from "@/components/ButtonText.vue";
     import { useRouter, useRoute } from "vue-router";
+    import { emailRegex } from "@/config";
+    import { useModalStore } from '@/stores/modal'
+    const modalStore = useModalStore();
     const serverAPI = import.meta.env.VITE_SERVER_API;
     const authStore = useAuthStore();
     const { t, locale } = useI18n();
@@ -48,6 +51,12 @@
             toastRef.value.showToast(t('0x0002:EMPTY_PASSWORD'));
             return;
         }
+        if(!emailRegex.test(email.value))
+        {
+            txt_password.value.$el.querySelector("input").focus();
+            toastRef.value.showToast(t('0x0015:INVAILID_EMAIL'));
+            return;
+        }
         try {
             console.log(JSON.stringify({ email: email.value, password: password.value }));
             const response = await fetch(`${serverAPI}/login`, {
@@ -70,14 +79,15 @@
                 return;
             }
             const data = await response.json();
-            console.log(data.token);
             localStorage.setItem('token', data.token); // Lưu token vào localStorage
             authStore.login(data.user, data.token);
             authStore.isAuthenticated = true;
             token.value = data.token;
-            //router.push('/messenger'); // Điều hướng sau khi đăng nhập thành công
+            if(props.viewMode === 'modal')
+            {
+                modalStore.closeModal();
+            }
             router.push(route.query.redirect || "/");
-            //this.$router.push(this.$route.query.redirect || '/messenger');
         } catch (error) {
             toastRef.value.showToast(t('0x0010:INTERNAL_SERVER_ERR'));
             return Promise.reject(error);
@@ -89,6 +99,7 @@
         <form class="popup-form">
             <h1 class="mb-2" v-if="props.viewMode === 'full'">{{ t('login') }}</h1>
             <InputText 
+                :inputType="'email'"
                 ref="txt_email"
                 :label="t('email')" 
                 :isRequired="true"

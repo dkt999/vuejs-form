@@ -12,6 +12,8 @@
     import ToastNotification from "@/components/ToastNotification.vue";
     import { strongPasswordRegex } from "@/config"; // Import config
     import { minimumPasswordLength } from "@/config"; // Import config
+    import { useModalStore } from '@/stores/modal'
+    const modalStore = useModalStore();
     const serverAPI = import.meta.env.VITE_SERVER_API;
     const toastRef = ref(null);
     const router = useRouter();
@@ -129,6 +131,10 @@
             authStore.login(response.data.user, response.data.token);
             authStore.isAuthenticated = true;
             token.value = response.data.token;
+            if(props.viewMode === 'modal')
+            {
+                modalStore.closeModal();
+            }
             router.push('/message');
             
         } catch (error) {
@@ -155,6 +161,7 @@
                 v-model="birthday"
             />
             <InputText 
+                :inputType="'email'"
                 ref="txt_email"
                 :label="t('email')" 
                 :isRequired="true"

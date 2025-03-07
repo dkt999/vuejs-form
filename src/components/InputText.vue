@@ -1,10 +1,14 @@
 <script setup>
 import { useI18n } from "vue-i18n";
 import { ref, computed } from "vue";
+import { emailRegex } from "@/config"; // Import config
 const { t, locale } = useI18n();
 const props = defineProps({
+  inputType:{
+    type: String,
+    default: 'text',
+  },
   label: String,
-  compareWith: String,
   isRequired:Boolean,
   modelValue: String,
 });
@@ -12,6 +16,10 @@ const errorMessage = computed(() => {
   if(props.isRequired && props.modelValue.length === 0  && isTouched.value)
   {
     return t('field_required');
+  }
+  if(props.inputType === 'email' && !emailRegex.test(props.modelValue) && isTouched.value)
+  {
+    return t('0x0015:INVAILID_EMAIL');
   }
   return "";
 });

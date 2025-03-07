@@ -31,5 +31,6 @@
   "0x0011:EMPTY_EMAIL":"Please enter your email!",
   "0x0012:PASSWORD_TOO_SHORT":"Password too short!",
   "0x0013:PASSWORD_NOT_MEET_REQUIREMENTS":"Password does not meet security requirements. password must contain upper and lower case alphabets!",
-  "0x0014:PASSWORD_NOT_MATCHED":"Password does not matched"
+  "0x0014:PASSWORD_NOT_MATCHED":"Password does not matched",
+  "0x0015:INVAILID_EMAIL":"Please enter vaild email!"
 }

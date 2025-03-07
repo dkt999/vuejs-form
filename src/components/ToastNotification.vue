@@ -5,10 +5,10 @@ const notifications = ref([]);
 const maxNotifications = 5;
 
 // Hàm hiển thị toast
-const showToast = async (message) => {
+const showToast = async (message, type="error") => {
   const id = Date.now();
   notifications.value.push({ id, message, show: false, fadeOut: false });
-
+    console.log(type);
     // Đợi Vue cập nhật DOM xong rồi thêm class slide-in
     await nextTick();
     const toast = notifications.value.find((t) => t.id === id);

@@ -1,36 +1,62 @@
 <script setup>
-import { useModalStore } from '@/stores/modal'
+import { useModalStore } from '@/stores/modal';
+import { useAuthStore } from '@/stores/auth';
 import ToastNotification from "@/components/ToastNotification.vue";
-import { ref, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useI18n } from "vue-i18n";
 //Init component
 import ButtonCircleRipple from '@/components/ButtonCircleRipple.vue';
 import BaseModal from '@/components/BaseModal.vue';
+import ButtonImageCircle from '@/components/ButtonImageCircle.vue';
 //Init view
 import MessageSettings from '@/views/MessageRegisterView.vue';
 import MessageLogin from '@/views/MessageLoginView.vue';
 import ButtonLogout from '@/components/ButtonLogout.vue';
+//Lấy settings
+const serverAPI = import.meta.env.VITE_SERVER_API;
 //Cấu hình modal
+const authStore = useAuthStore();
 const modalStore = useModalStore()
 const { t, locale } = useI18n();
-//Test noti 
 const toastRef = ref(null);
-const count = ref(1);
-// Hàm gọi toast từ component con
-const notify = () => {
-    count.value ++;
-    toastRef.value.showToast("Thông báo mới tji" + count.value);
-};
-</script>
+const token = localStorage.getItem("token");
+const loginByTokent = async () => {
+    if(token !== null)
+    {
+        try {
+            const response = await fetch(`${serverAPI}/verify`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+            })
 
+            if (!response.ok) {
+                authStore.logout();
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            authStore.init();
+        } catch (error) {
+            console.error('Error fetching image:', error);
+            authStore.logout();
+        }
+    }
+    else 
+    {
+        authStore.logout();
+    }
+}
+onMounted(loginByTokent)
+</script>
 <template>
     <div class="message-app">
         <div class="quick-bar">
-            <ButtonCircleRipple :icon="'mdi-google-ads'"/>
+            <ButtonCircleRipple v-if="!authStore.isAuthenticated" :icon="'mdi-google-ads'"/>
+            <ButtonImageCircle v-if="authStore.isAuthenticated"></ButtonImageCircle>
             <div class="spacer"></div>
             <ButtonCircleRipple :icon="'mdi-tune-vertical-variant'" @click="modalStore.toggleState(t('login_to_system'), MessageLogin)"/>
             <ButtonCircleRipple :icon="'mdi-tune-vertical-variant'" @click="modalStore.toggleState(t('register_to_system'), MessageSettings)"/>
-            <ButtonLogout />
+            <ButtonLogout v-if="authStore.isAuthenticated"/>
         </div>
         <div>
             <div class="main-view">

@@ -33,12 +33,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token'); // Kiểm tra token lưu trong localStorage
   if (to.path === "/") {
-    // Nếu đã đăng nhập → chuyển đến '/message'
-    // Nếu chưa đăng nhập → chuyển đến '/login'
     next(token ? "/message" : "/login");
   } 
   else if (!token && (to.path !== "/login" && to.path !== "/register")) {
-    // Nếu chưa đăng nhập và không phải đang ở trang login, chuyển về login
     next({ path: "/login", query: { redirect: to.fullPath } });
   } else {
     next();

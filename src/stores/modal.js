@@ -10,5 +10,8 @@ export const useModalStore = defineStore('modal', () => {
     mainPopupTitle.value = title;
     mainPopupComponent.value = component;
   }
-  return { mainPopupState, mainPopupTitle, mainPopupComponent, toggleState }
+  const closeModal = () => {
+    mainPopupState.value = false;
+  }
+  return { mainPopupState, mainPopupTitle, mainPopupComponent, toggleState, closeModal }
 })
