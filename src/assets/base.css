@@ -16,6 +16,7 @@
   --vt-c-text-dark-1: var(--vt-c-white);
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
   --text-mute:#848484;
+  --item-list-select:#081E40;
 }
 
 /* semantic color variables for this project */
@@ -47,6 +48,7 @@
     --color-input-hover: #323232;
     --color-input-lable:#A6A6A6;
     --color-input-lable-focus: #FFFFFF;
+    --item-list-select:#081E40;
   }
 }
 

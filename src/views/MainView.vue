@@ -1,6 +1,7 @@
 <script setup>
 import { useModalStore } from '@/stores/modal';
 import { useAuthStore } from '@/stores/auth';
+import { useMessageUI } from '@/stores/messageUI';
 import ToastNotification from "@/components/ToastNotification.vue";
 import { ref, onMounted } from 'vue';
 import { useI18n } from "vue-i18n";
@@ -16,7 +17,8 @@ import ButtonLogout from '@/components/ButtonLogout.vue';
 const serverAPI = import.meta.env.VITE_SERVER_API;
 //Cấu hình modal
 const authStore = useAuthStore();
-const modalStore = useModalStore()
+const modalStore = useModalStore();
+const messageUI = useMessageUI();
 const { t, locale } = useI18n();
 const toastRef = ref(null);
 const token = localStorage.getItem("token");
@@ -52,7 +54,7 @@ onMounted(loginByTokent)
     <div class="message-app">
         <div class="quick-bar">
             <ButtonCircleRipple v-if="!authStore.isAuthenticated" :icon="'mdi-message-bulleted'"/>
-            <ButtonImageCircle v-if="authStore.isAuthenticated" :src="authStore.user.avatar"></ButtonImageCircle>
+            <ButtonImageCircle v-if="authStore.isAuthenticated" :src="authStore.user.avatar" @click="messageUI.toggleSlide"/>
             <div class="spacer"></div>
             <ButtonCircleRipple v-if="!authStore.isAuthenticated" :icon="'mdi-login'" @click="modalStore.toggleState(t('login_to_system'), MessageLogin)"/>
             <ButtonCircleRipple v-if="!authStore.isAuthenticated" :icon="'mdi-account-plus'" @click="modalStore.toggleState(t('register_to_system'), MessageSettings)"/>
@@ -93,6 +95,6 @@ onMounted(loginByTokent)
     margin-bottom: 8px;
 }
 .quick-bar > .icon:first-child {
-    margin-top: 8px;
+    margin-top: 13px;
 }
 </style>
