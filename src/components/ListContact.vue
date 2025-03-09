@@ -7,6 +7,10 @@ const scrollContainer = ref(null);
 const hideTimeout = ref(null);
 const hasOverflow = ref(false);
 const selectedIndex = ref(null);
+const contacts = ref([]);
+const updateContactList = (newContacts) => {
+    contacts.value = newContacts; // Cập nhật danh sách liên hệ từ API
+};
 const state = reactive({
   selectedIndex: null
 });
@@ -35,7 +39,7 @@ onMounted(() => {
 
 <template>
     <div class="list-contact">
-        <ListContactTopPanel />
+        <ListContactTopPanel @update-list="updateContactList" />
         <div class="seperator"></div>
         <div class="scroll-wrapper">
             <div class="scroll-container"
@@ -44,10 +48,11 @@ onMounted(() => {
                 @mouseenter="showScrollbar"
                 @mousemove="showScrollbar">
                 <ListContactItem 
-                    v-for="(n, index) in 20"
+                    v-for="(contact, index) in contacts"
                     :key="index"
-                    :class="{ 'item-select': state.selectedIndex === index }"
-                    @click="selectItem(index);" 
+                    :class="{ 'item-select': state.selectedIndex === contact.id }"
+                    @click="selectItem(contact.id);"
+                    :contact="contact"
                 />
             </div>
             <div class="scroll-cover" :class="{ visible: isScrollbarVisible }"></div>

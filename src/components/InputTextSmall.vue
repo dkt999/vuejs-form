@@ -1,14 +1,19 @@
 <script setup>
-    import { useI18n } from "vue-i18n";
-import IconMagnify from "./icons/iconMagnify.vue";
-import IconRender from "./IconRender.vue";
-    const { t, locale } = useI18n();
-    const props = defineProps(['placeholder'])
+    import IconRender from "./IconRender.vue";
+    import { defineProps, defineEmits } from 'vue';
+    const props = defineProps({
+        modelValue: String,
+        placeholder: String
+    });
+    defineEmits(['update:modelValue']);
 </script>
 <template>
     <div class="wrapper">
-        <div></div>
-        <input type="text" :placeholder="props.placeholder">
+        <input 
+        type="text" 
+        :placeholder="props.placeholder"
+        :value="modelValue"
+        @input="$emit('update:modelValue', $event.target.value)">
         <div class="mdi-right">
             <IconRender icon="mdi-magnify" />
         </div>

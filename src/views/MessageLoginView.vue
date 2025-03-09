@@ -9,6 +9,7 @@
     import { useRouter, useRoute } from "vue-router";
     import { emailRegex } from "@/config";
     import { useModalStore } from '@/stores/modal'
+    import socket from "@/plugins/socket";
     const modalStore = useModalStore();
     const serverAPI = import.meta.env.VITE_SERVER_API;
     const authStore = useAuthStore();
@@ -83,6 +84,13 @@
             authStore.login(data.user, data.token);
             authStore.isAuthenticated = true;
             token.value = data.token;
+            socket.auth = { token: data.token }; // Truyền token cho socket
+            socket.connect();
+            socket.emit("registerSession", {
+                device: navigator.userAgent,
+                ip: "192.168.1.1" // Thay bằng IP thực tế nếu có
+            });
+
             if(props.viewMode === 'modal')
             {
                 modalStore.closeModal();

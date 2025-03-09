@@ -3,8 +3,37 @@
     import { useAuthStore } from '@/stores/auth';
     import InputTextSmall from './InputTextSmall.vue';
     import { useI18n } from "vue-i18n";
+    import { ref, watch, defineEmits } from 'vue';
     const { t, locale } = useI18n();
+    //Lấy settings
+    const serverAPI = import.meta.env.VITE_SERVER_API;
     const authStore = useAuthStore();
+    //Xử lí gọi api
+    const searchText = ref('');
+    const emit = defineEmits(['update-list']);
+    // Gọi API mỗi khi giá trị searchText thay đổi
+    watch(searchText, async (newValue) => {
+        if (!newValue.trim()) {
+            emit('update-list', []); // Nếu trống, reset danh sách
+            return;
+        }
+
+        try {
+            const response = await fetch(`${serverAPI}/users/search?query=${newValue}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`, // Thêm Bearer Token
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json();
+            console.log(data.data);
+            emit('update-list', data.data);
+           
+        } catch (error) {
+            console.error("Lỗi khi gọi API:", error);
+        }
+    });
 </script>
 <template>
     <div class="wrapper">
@@ -18,7 +47,10 @@
             </div>
         </div>
         <div>
-            <InputTextSmall :placeholder="t('enter_to_search')" :icon="'mdi-magnify'"/>
+            <InputTextSmall  
+            v-model="searchText"  
+            :placeholder="t('enter_to_search')" 
+            :icon="'mdi-magnify'"/>
         </div>
     </div>
 </template>

@@ -6,19 +6,20 @@
     const handleClick = () => {
         emit('click'); // Phát sự kiện click lên component cha
     };
+    const props = defineProps(['contact']);
+    //authStore.user.avatar
 </script>
 <template>
     <div @click="handleClick" :class="['item', $attrs.class]">
         <div class="item-inner">
             <div class="image">
-                <ButtonImageCircle v-if="authStore.isAuthenticated" :src="authStore.user.avatar"></ButtonImageCircle>
+                <ButtonImageCircle :src="props.contact.avatar" />
             </div>
             <div class="item-profile">
-                <div class="name">Đinh Kim Thạch</div>
-                <div class="text-mute">Idle</div>
+                <div class="name">{{ props.contact.name }}</div>
+                <div class="text-mute">testing</div>
             </div>
         </div>
-        
     </div>
 </template>
 <style>
@@ -29,8 +30,7 @@
 .item{
     margin-bottom: 8px;
     display: flex;
-    cursor: pointer;
-    
+    cursor: pointer;   
 }
 .item:hover{
     background-color: var(--item-list-select); 
@@ -49,7 +49,6 @@
 }
 .name{
     color: var(--vt-c-text-dark-2);
-    
     font-size: 1rem;
 }
 .text-mute{

@@ -6,8 +6,9 @@ import App from './App.vue'
 import router from './router'
 import i18n from "./i18n";
 import { vRipple } from "@/directives/ripple.js"; 
+import socket from "@/plugins/socket";
 const app = createApp(App)
-
+app.provide("socket", socket);
 app.use(createPinia())
 app.use(router)
 app.use(i18n);
