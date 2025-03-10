@@ -2,21 +2,22 @@
 import { ref, reactive, onMounted, nextTick } from "vue";
 import ListContactItem from '@/components/ListContactItem.vue';
 import ListContactTopPanel from "./ListContactTopPanel.vue";
+import { useMessageUI } from '@/stores/messageUI'
+const messageUI = useMessageUI();
 const isScrollbarVisible = ref(false);
 const scrollContainer = ref(null);
 const hideTimeout = ref(null);
 const hasOverflow = ref(false);
-const selectedIndex = ref(null);
 const contacts = ref([]);
 const updateContactList = (newContacts) => {
     contacts.value = newContacts; // Cập nhật danh sách liên hệ từ API
 };
 const state = reactive({
-  selectedIndex: null
+    u_id: null
 });
 const selectItem = (index) => {
-  state.selectedIndex = index;
-  console.log(index);
+  state.u_id = index;
+  messageUI.selectUser(index);
 };
 const showScrollbar = () => {
     checkOverflow();
@@ -50,7 +51,7 @@ onMounted(() => {
                 <ListContactItem 
                     v-for="(contact, index) in contacts"
                     :key="index"
-                    :class="{ 'item-select': state.selectedIndex === contact.id }"
+                    :class="{ 'item-select': state.u_id === contact.id }"
                     @click="selectItem(contact.id);"
                     :contact="contact"
                 />
@@ -73,7 +74,7 @@ onMounted(() => {
 .scroll-container{
     width: 100%;
     padding-top: 8px;
-    height: calc(100vh - 200px);
+    height: calc(100vh - 132px);
     overflow-y: auto;
 }
 ::-webkit-scrollbar {

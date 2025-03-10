@@ -3,7 +3,7 @@
     import { useAuthStore } from '@/stores/auth';
     import InputTextSmall from './InputTextSmall.vue';
     import { useI18n } from "vue-i18n";
-    import { ref, watch, defineEmits } from 'vue';
+    import { ref, watch } from 'vue';
     const { t, locale } = useI18n();
     //Lấy settings
     const serverAPI = import.meta.env.VITE_SERVER_API;

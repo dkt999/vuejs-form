@@ -1,6 +1,5 @@
 <script setup>
     import IconRender from "./IconRender.vue";
-    import { defineProps, defineEmits } from 'vue';
     const props = defineProps({
         modelValue: String,
         placeholder: String
