@@ -15,9 +15,9 @@ const updateContactList = (newContacts) => {
 const state = reactive({
     u_id: null
 });
-const selectItem = (index) => {
+const selectItem = (index, contact) => {
   state.u_id = index;
-  messageUI.selectUser(index);
+  messageUI.selectUser(index, contact);
 };
 const showScrollbar = () => {
     checkOverflow();
@@ -52,7 +52,7 @@ onMounted(() => {
                     v-for="(contact, index) in contacts"
                     :key="index"
                     :class="{ 'item-select': state.u_id === contact.id }"
-                    @click="selectItem(contact.id);"
+                    @click="selectItem(contact.id, contact);"
                     :contact="contact"
                 />
             </div>

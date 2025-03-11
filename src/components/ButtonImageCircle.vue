@@ -4,7 +4,7 @@
   const props = defineProps(['src']);
   const serverAPI = import.meta.env.VITE_SERVER_API;
   const authStore = useAuthStore();
-  const imageUrl = ref('1')
+  const imageUrl = ref(null)
   const fetchImage = async () => {
     if(!localStorage.getItem('token')) return;
     if(!authStore.user || !authStore.user.avatar) return;

@@ -1,13 +1,10 @@
 <script setup>
-    import { useAuthStore } from '@/stores/auth';
     import ButtonImageCircle from '@/components/ButtonImageCircle.vue';
-    const authStore = useAuthStore();
     const emit = defineEmits(['click']);
     const handleClick = () => {
         emit('click'); // Phát sự kiện click lên component cha
     };
     const props = defineProps(['contact']);
-    //authStore.user.avatar
 </script>
 <template>
     <div @click="handleClick" :class="['item', $attrs.class]">

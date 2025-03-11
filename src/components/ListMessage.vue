@@ -1,7 +1,9 @@
 <script setup>
     import { ref, watch } from 'vue';
-import ListMessageAddContact from './ListMessageAddContact.vue';
-    const props = defineProps(['uid']);
+    import ListMessageAddContact from './ListMessageAddContact.vue';
+    import { useMessageUI } from '@/stores/messageUI'
+    const messageUI = useMessageUI();
+    const props = defineProps(['uid', 'uinfo']);
     const serverAPI = import.meta.env.VITE_SERVER_API;
     const roomId = ref(null);
     const resultType = ref('contact');
@@ -25,5 +27,7 @@ import ListMessageAddContact from './ListMessageAddContact.vue';
     }, { immediate: true });
 </script>
 <template>
-    <ListMessageAddContact v-if="!roomId && resultType === 'contact'" />
+    <div :class="['list-message', { expanded: messageUI.messageUISlide }]">
+        <ListMessageAddContact v-if="!roomId && resultType === 'contact'"/>
+    </div>
 </template>

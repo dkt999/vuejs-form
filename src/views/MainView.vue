@@ -71,7 +71,7 @@ onMounted(loginByTokent)
 </template>
 <style scoped>
 .main-view{
-    width: calc(100vw - 56px);
+    width: calc(100vw - 64px);
 }
 .message-app{
     width: 100vw;
