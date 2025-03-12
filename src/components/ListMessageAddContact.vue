@@ -1,25 +1,48 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { useMessageUI } from '@/stores/messageUI'
+import { useAuthStore } from '@/stores/auth'
 import ImageBox from '@/components/ImageBox.vue';
+import ButtonText from './ButtonText.vue';
+import { useI18n } from "vue-i18n";
+import InputTextSmall from './InputTextSmall.vue';
+import socket from "@/plugins/socket";
 const serverAPI = import.meta.env.VITE_SERVER_API;
 const messageUI = useMessageUI();
+const authStore = useAuthStore();
 const avatar = ref(null);
+const name = ref(null);
+const { t, locale } = useI18n();
 watch(() => messageUI.selectUId, () => {
     if(messageUI.selectUInfo)
     {
         avatar.value = messageUI.selectUInfo.avatar;
-        console.log(avatar.value)
+        name.value = messageUI.selectUInfo.name;
     }
 }, { immediate: true });
-
+const handleSendAddFriendRequest = () => {
+    const receiver = messageUI.selectUInfo;
+    const sender = authStore.user;
+    socket.auth = { token: authStore.token }; // Truyền token cho socket
+    socket.connect();
+    socket.emit("handleSendAddFriendRequest", {
+        sender: sender,
+        receiver:receiver
+    });
+};
 </script>
 <template>
-    <div>
+    <div v-if="name">
         <div class="center">
-            <ImageBox :src="avatar" mode='avatarXL'/>
-            <div></div>
-            <div></div>
+            <div class="text-center">
+                <ImageBox :src="avatar" mode='avatarXL'/>
+                <h3>{{ name }}</h3>
+                <InputTextSmall icon="mdi-receipt-text-send" :placeholder="t('say_hello')"/>
+                <div class="text-center mt-2">
+                    <ButtonText :label="t('add_friend')" @click="handleSendAddFriendRequest"/>
+                </div>
+            </div>
+            
         </div>
     </div>
 </template>
@@ -27,6 +50,12 @@ watch(() => messageUI.selectUId, () => {
     .center{
         display: flex;
         align-items: center;
-        justify-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+    .text-center{
+        text-align: center;
+        width: 100%;
+        max-width: 350px;
     }
 </style>

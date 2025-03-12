@@ -41,6 +41,7 @@
     .avatarXL{
         border-radius: 50%;
         width: 8rem;
+        height: 8rem;
     }
     .round{
         border-radius: 8px;

@@ -6,19 +6,16 @@
             default: "md-primary",
         }
     });
+    const emit = defineEmits(['click']);
+    const handleClick = (event) => {
+      emit('click', event);
+    };
 </script>
 <template>
-    <div class="container">
-        <button :class="['md-button', props.class]">{{ props.label }}</button>
-    </div>
+  <button :class="['md-button', props.class]" v-ripple @click="handleClick">{{ props.label }}</button>
 </template>
   
 <style scoped>
-.container{
-  display:flex;
-  width: fit-content;
-}
-  /* Button Styles */
 .md-button {
   font-size: 16px;
   font-weight: 500;
@@ -29,7 +26,6 @@
   position: relative;
   overflow: hidden; /* Quan trọng để giữ ripple trong nút */
   transition: background 0.3s, box-shadow 0.2s;
-  text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 

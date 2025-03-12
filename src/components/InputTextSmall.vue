@@ -2,7 +2,8 @@
     import IconRender from "./IconRender.vue";
     const props = defineProps({
         modelValue: String,
-        placeholder: String
+        placeholder: String,
+        icon:String
     });
     defineEmits(['update:modelValue']);
 </script>
@@ -14,7 +15,7 @@
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)">
         <div class="mdi-right">
-            <IconRender icon="mdi-magnify" />
+            <IconRender :icon="props.icon" v-if="props.icon"/>
         </div>
     </div>
 </template>
@@ -40,6 +41,7 @@ input {
     margin-right: 0.6rem;
 }
 .mdi-right{
+    margin-top: 6px;
     margin-right: .6rem;
 }
 </style>
