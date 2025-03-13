@@ -10,8 +10,8 @@ export const useMessageUI = defineStore('messageUI', () => {
     console.log(messageUISlide.value);
     sessionStorage.setItem('useMessageUI.messageUISlide', messageUISlide.value);
   }
-  const selectUser = (selectUIdInput, userInfo) => {
-    selectUId.value = selectUIdInput;
+  const selectUser = (userInfo) => {
+    selectUId.value = userInfo.id;
     selectUInfo.value = userInfo;
   } 
   return { messageUISlide, toggleSlide, selectUser, selectUId, selectUInfo}

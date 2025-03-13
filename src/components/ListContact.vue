@@ -9,16 +9,34 @@ const scrollContainer = ref(null);
 const hideTimeout = ref(null);
 const hasOverflow = ref(false);
 const contacts = ref([]);
+const serverAPI = import.meta.env.VITE_SERVER_API;
 const updateContactList = (newContacts) => {
-    contacts.value = newContacts; // Cập nhật danh sách liên hệ từ API
+    contacts.value = newContacts;
 };
+const initContactList = async() => {
+    try {
+        const response = await fetch(`${serverAPI}/contacts`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`, // Thêm Bearer Token
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+        updateContactList(data)
+    } catch (error) {
+        console.error("Lỗi khi gọi API:", error);
+    }
+    return;
+}
 const state = reactive({
     u_id: null
 });
 const selectItem = (index, contact) => {
   state.u_id = index;
-  messageUI.selectUser(index, contact);
+  messageUI.selectUser(contact);
 };
+//Xử lý ẩn hiện thanh scroll
 const showScrollbar = () => {
     checkOverflow();
     if (!hasOverflow.value) return; 
@@ -35,6 +53,7 @@ const checkOverflow = () => {
 };
 onMounted(() => {
   nextTick(checkOverflow);
+  initContactList();
 });
 </script>
 

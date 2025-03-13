@@ -7,7 +7,7 @@
     const props = defineProps(['contact']);
 </script>
 <template>
-    <div @click="handleClick" :class="['item', $attrs.class]">
+    <div @click="handleClick" :class="['item', $attrs.class]" :uid="props.contact.id">
         <div class="item-inner">
             <div class="image">
                 <ButtonImageCircle :src="props.contact.avatar" />

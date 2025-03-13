@@ -14,12 +14,23 @@
     // Gọi API mỗi khi giá trị searchText thay đổi
     watch(searchText, async (newValue) => {
         if (!newValue.trim()) {
-            emit('update-list', []); // Nếu trống, reset danh sách
+            try {
+                const response = await fetch(`${serverAPI}/contacts`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`, // Thêm Bearer Token
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                emit('update-list', data);
+            } catch (error) {
+                console.error("Lỗi khi gọi API:", error);
+            }
             return;
         }
-
         try {
-            const response = await fetch(`${serverAPI}/users/search?query=${newValue}`, {
+            const response = await fetch(`${serverAPI}/contacts/search?query=${newValue}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`, // Thêm Bearer Token
@@ -27,8 +38,7 @@
                 }
             });
             const data = await response.json();
-            console.log(data.data);
-            emit('update-list', data.data);
+            emit('update-list', data);
            
         } catch (error) {
             console.error("Lỗi khi gọi API:", error);
