@@ -1,18 +1,22 @@
 <script setup>
-import { ref, reactive, onMounted, nextTick } from "vue";
+import { ref, reactive, onMounted, nextTick, computed, watch } from "vue";
 import ListContactItem from '@/components/ListContactItem.vue';
 import ListContactTopPanel from "./ListContactTopPanel.vue";
-import { useMessageUI } from '@/stores/messageUI'
+import { useMessageUI } from '@/stores/messageUI';
+import { useContactStore } from '@/stores/contactStore';
 const messageUI = useMessageUI();
 const isScrollbarVisible = ref(false);
 const scrollContainer = ref(null);
 const hideTimeout = ref(null);
 const hasOverflow = ref(false);
-const contacts = ref([]);
 const serverAPI = import.meta.env.VITE_SERVER_API;
+const contactStore = useContactStore();
+const contacts = ref([]);
 const updateContactList = (newContacts) => {
+    console.log('update')
     contacts.value = newContacts;
 };
+/*
 const initContactList = async() => {
     try {
         const response = await fetch(`${serverAPI}/contacts`, {
@@ -29,6 +33,7 @@ const initContactList = async() => {
     }
     return;
 }
+*/
 const state = reactive({
     u_id: null
 });
@@ -51,15 +56,19 @@ const checkOverflow = () => {
     hasOverflow.value = scrollContainer.value.scrollHeight > scrollContainer.value.clientHeight;
   }
 };
-onMounted(() => {
+onMounted(async () => {
   nextTick(checkOverflow);
-  initContactList();
+  await contactStore.initContactList(); // Chờ request hoàn thành
+  updateContactList(contactStore.contacts);
 });
+watch(() => [contactStore.contacts], () => {
+    updateContactList(contactStore.contacts);
+}, { immediate: true });
 </script>
 
 <template>
     <div class="list-contact">
-        <ListContactTopPanel @update-list="updateContactList" />
+        <ListContactTopPanel @update-list="updateContactList" @reset-selected="state.u_id = null" />
         <div class="seperator"></div>
         <div class="scroll-wrapper">
             <div class="scroll-container"

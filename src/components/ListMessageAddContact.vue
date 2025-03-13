@@ -1,7 +1,8 @@
 <script setup>
 import { ref, watch, onMounted, onUnmounted } from 'vue';
-import { useMessageUI } from '@/stores/messageUI'
-import { useAuthStore } from '@/stores/auth'
+import { useMessageUI } from '@/stores/messageUI';
+import { useAuthStore } from '@/stores/auth';
+import { useContactStore } from '@/stores/contactStore';
 import ImageBox from '@/components/ImageBox.vue';
 import ButtonText from './ButtonText.vue';
 import { useI18n } from "vue-i18n";
@@ -10,6 +11,7 @@ import socket from "@/plugins/socket";
 const serverAPI = import.meta.env.VITE_SERVER_API;
 const messageUI = useMessageUI();
 const authStore = useAuthStore();
+const contactStore = useContactStore();
 const avatar = ref(null);
 const name = ref(null);
 const { t, locale } = useI18n();
@@ -23,22 +25,19 @@ watch(() => messageUI.selectUId, () => {
 const handleSendAddFriendRequest = () => {
     const receiver = messageUI.selectUInfo;
     const sender = authStore.user;
-    socket.auth = { token: authStore.token }; // Truyền token cho socket
+    socket.auth = { token: authStore.token };
     socket.connect();
     socket.emit("handleSendAddFriendRequest", {
         sender: sender,
         receiver:receiver
     });
 };
-// Lắng nghe socket khi có yêu cầu kết bạn mới
 onMounted(() => {
     socket.on("new-contact-request", (data) => {
-        console.log("📩 Nhận yêu cầu kết bạn:", data);
-        //friendRequests.value.push(data); // Thêm vào danh sách yêu cầu kết bạn
+        contactStore.addNewContact(data);  
+        contactStore.initContactList();
     });
 });
-
-// Ngắt lắng nghe khi component bị unmount
 onUnmounted(() => {
     socket.off("new-contact-request");
 });

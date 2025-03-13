@@ -1,6 +1,7 @@
 <script setup>
     import ButtonImageCircle from '@/components/ButtonImageCircle.vue';
     import { useAuthStore } from '@/stores/auth';
+    import { useMessageUI } from '@/stores/messageUI';
     import InputTextSmall from './InputTextSmall.vue';
     import { useI18n } from "vue-i18n";
     import { ref, watch } from 'vue';
@@ -8,11 +9,13 @@
     //Lấy settings
     const serverAPI = import.meta.env.VITE_SERVER_API;
     const authStore = useAuthStore();
+    const messageUI = useMessageUI();
     //Xử lí gọi api
     const searchText = ref('');
-    const emit = defineEmits(['update-list']);
+    const emit = defineEmits(['update-list', 'reset-selected']);
     // Gọi API mỗi khi giá trị searchText thay đổi
     watch(searchText, async (newValue) => {
+        emit('reset-selected');
         if (!newValue.trim()) {
             try {
                 const response = await fetch(`${serverAPI}/contacts`, {
@@ -22,6 +25,7 @@
                         'Content-Type': 'application/json'
                     }
                 });
+
                 const data = await response.json();
                 emit('update-list', data);
             } catch (error) {

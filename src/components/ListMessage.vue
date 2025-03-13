@@ -20,7 +20,6 @@
             });
             const data = await response.json();
             roomId.value = data.room_id; // Nếu có phòng chat thì nhận room_id, nếu không thì null
-            console.log(data);
             loadMessage.value = false;
             // Đợi một chút trước khi hiển thị lại để có hiệu ứng mượt
             setTimeout(() => {
@@ -33,11 +32,8 @@
     watch(() => [messageUI.selectUId, roomId.value], () => {
         loadMessage.value = true;
         checkPrivateChatRoom();
-        console.log('change');
     }, { immediate: true });
-
     onMounted(() => {
-        console.log('mounted');
         checkPrivateChatRoom();
     });
 </script>
