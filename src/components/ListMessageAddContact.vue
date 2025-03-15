@@ -8,6 +8,7 @@ import ButtonText from './ButtonText.vue';
 import { useI18n } from "vue-i18n";
 import InputTextSmall from './InputTextSmall.vue';
 import socket from "@/plugins/socket";
+const emit = defineEmits(['update-room']);
 const serverAPI = import.meta.env.VITE_SERVER_API;
 const messageUI = useMessageUI();
 const authStore = useAuthStore();
@@ -34,6 +35,7 @@ const handleSendAddFriendRequest = () => {
 };
 onMounted(() => {
     socket.on("new-contact-request", (data) => {
+        emit("update-room");
         contactStore.addNewContact(data);  
         contactStore.initContactList();
     });

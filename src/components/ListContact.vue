@@ -1,9 +1,11 @@
 <script setup>
-import { ref, reactive, onMounted, nextTick, computed, watch } from "vue";
+import { ref, reactive, onMounted, nextTick, watch } from "vue";
 import ListContactItem from '@/components/ListContactItem.vue';
 import ListContactTopPanel from "./ListContactTopPanel.vue";
 import { useMessageUI } from '@/stores/messageUI';
 import { useContactStore } from '@/stores/contactStore';
+import socket from "@/plugins/socket";
+const emit = defineEmits(['update-room']);
 const messageUI = useMessageUI();
 const isScrollbarVisible = ref(false);
 const scrollContainer = ref(null);
@@ -16,24 +18,6 @@ const updateContactList = (newContacts) => {
     console.log('update')
     contacts.value = newContacts;
 };
-/*
-const initContactList = async() => {
-    try {
-        const response = await fetch(`${serverAPI}/contacts`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`, // Thêm Bearer Token
-                'Content-Type': 'application/json'
-            }
-        });
-        const data = await response.json();
-        updateContactList(data)
-    } catch (error) {
-        console.error("Lỗi khi gọi API:", error);
-    }
-    return;
-}
-*/
 const state = reactive({
     u_id: null
 });
@@ -60,6 +44,12 @@ onMounted(async () => {
   nextTick(checkOverflow);
   await contactStore.initContactList(); // Chờ request hoàn thành
   updateContactList(contactStore.contacts);
+  //Socket manager
+  socket.on("new-contact-request", (data) => {
+    contactStore.addNewContact(data);  
+    contactStore.initContactList();
+    emit("update-room");
+  });
 });
 watch(() => [contactStore.contacts], () => {
     updateContactList(contactStore.contacts);

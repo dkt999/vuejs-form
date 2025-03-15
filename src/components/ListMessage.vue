@@ -1,11 +1,13 @@
 <script setup>
     import { onMounted, ref, watch } from 'vue';
-    import ListMessageAddContact from './ListMessageAddContact.vue';
-    import ListMessageAcceptContact from './ListMessageAcceptContact.vue';
+    import ListMessageAddContact from '@/components/ListMessageAddContact.vue';
+    import ListMessageAcceptContact from '@/components/ListMessageAcceptContact.vue';
+    import ListMessageMain from '@/components/ListMessageMain.vue';
     import { useMessageUI } from '@/stores/messageUI'
     const messageUI = useMessageUI();
     const serverAPI = import.meta.env.VITE_SERVER_API;
     const roomId = ref(null);
+    const roomStatus = ref(null);
     const resultType = ref('contact');
     const loadMessage = ref(true);
     const showListMessage = ref(false);
@@ -20,6 +22,8 @@
             });
             const data = await response.json();
             roomId.value = data.room_id; // Nếu có phòng chat thì nhận room_id, nếu không thì null
+            messageUI.selectRoom = data.room_id;
+            roomStatus.value = data.status;
             loadMessage.value = false;
             // Đợi một chút trước khi hiển thị lại để có hiệu ứng mượt
             setTimeout(() => {
@@ -40,8 +44,9 @@
 <template>
     <Transition name="fade">
         <div v-if="showListMessage" :class="['list-message', { expanded: messageUI.messageUISlide }]">
-            <ListMessageAddContact v-if="!roomId && resultType === 'contact' && !loadMessage"/>
-            <ListMessageAcceptContact v-if="roomId && resultType === 'contact' && !loadMessage"/>
+            <ListMessageAddContact v-if="!roomId && resultType === 'contact' && !loadMessage" @update-room="checkPrivateChatRoom"/>
+            <ListMessageAcceptContact v-if="roomId && resultType === 'contact' && !loadMessage && roomStatus==='pending'" @update-room="checkPrivateChatRoom"/>
+            <ListMessageMain v-if="roomId && resultType === 'contact' && !loadMessage && roomStatus==='accept'"/>
         </div>
     </Transition>
 </template>

@@ -6,7 +6,7 @@
   const authStore = useAuthStore();
   const imageUrl = ref(null)
   const fetchImage = async () => {
-    if(!localStorage.getItem('token')) return;
+    if(!localStorage.getItem('token') || props.src === undefined) return;
     if(!authStore.user || !authStore.user.avatar) return;
     const token = authStore.token;
     try {
